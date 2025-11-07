@@ -13,7 +13,7 @@ import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
 import { NotFound } from '@/components/NotFound'
 
 import appCss from '@/styles.css?url'
-
+import { seo } from '@/utils/seo'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -29,9 +29,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      {
-        title: 'TanStack Start Starter',
-      },
+      ...seo({
+        title: 'Vitesse TanStack',
+        description: `TanStack Start is a type-safe, client-first, full-stack React framework. `,
+      }),
     ],
     links: [
       {
