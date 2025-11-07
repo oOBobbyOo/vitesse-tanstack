@@ -12,7 +12,7 @@ import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
 import { NotFound } from '@/components/NotFound'
 
-import appCss from '@/styles.css?url'
+import appCss from '@/styles/app.css?url'
 import { seo } from '@/utils/seo'
 
 interface MyRouterContext {
