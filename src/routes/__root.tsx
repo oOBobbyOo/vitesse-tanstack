@@ -6,11 +6,14 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-
-import appCss from '../styles.css?url'
-
 import type { QueryClient } from '@tanstack/react-query'
+import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
+
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
+import { NotFound } from '@/components/NotFound'
+
+import appCss from '@/styles.css?url'
+
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -37,7 +40,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
-
+  errorComponent: DefaultCatchBoundary,
+  notFoundComponent: () => <NotFound />,
   shellComponent: RootDocument,
 })
 
