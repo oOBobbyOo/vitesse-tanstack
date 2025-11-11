@@ -11,10 +11,12 @@ import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 
 import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
 import { NotFound } from '@/components/NotFound'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import { Footer } from '@/components/Footer'
 
 import appCss from '@/styles/app.css?url'
 import { seo } from '@/utils/seo'
+import { THEME_COLORS } from '@/constants'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -29,6 +31,16 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       {
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
+      },
+      {
+        name: 'theme-color',
+        content: THEME_COLORS.light,
+        media: '(prefers-color-scheme: light)',
+      },
+      {
+        name: 'theme-color',
+        content: THEME_COLORS.dark,
+        media: '(prefers-color-scheme: dark)',
       },
       ...seo({
         title: 'Vitesse TanStack',
@@ -54,8 +66,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
-        <Footer />
+        <ThemeProvider>
+          <>
+            {children}
+            <Footer />
+          </>
+        </ThemeProvider>
 
         <TanStackDevtools
           config={{
