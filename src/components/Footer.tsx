@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { FaGithub, FaHome } from 'react-icons/fa'
 import { MdLibraryBooks } from 'react-icons/md'
+import { ThemeToggle } from './ThemeToggle'
 import { cn } from '@/utils/cn'
 
 export function Footer() {
@@ -22,7 +23,8 @@ export function Footer() {
     },
   ]
 
-  const linkClasses = `flex items-center justify-between group px-2 py-1 rounded-lg hover:bg-gray-500/10 font-black`
+  const linkClasses = `flex items-center justify-between group px-2 py-1 rounded-lg
+   hover:bg-gray-500/10 font-black`
 
   return (
     <div className="text-2xl m-5 flex justify-center gap-3">
@@ -43,6 +45,8 @@ export function Footer() {
           </Link>
         )
       })}
+
+      <ThemeToggle />
     </div>
   )
 }
