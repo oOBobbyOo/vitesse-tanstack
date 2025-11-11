@@ -1,11 +1,16 @@
 import { FaMoon, FaSun } from 'react-icons/fa'
+import { useTheme } from './ThemeProvider'
 
 export function ThemeToggle() {
+  const { toggleMode } = useTheme()
+
   const handleToggleMode = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     e.preventDefault()
     e.stopPropagation()
+
+    toggleMode()
   }
 
   return (
