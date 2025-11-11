@@ -1,5 +1,18 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:is(.dark, .dark *));
+@custom-variant light (&:is(.light, .light *));
+@custom-variant auto (&:is(.auto, .auto *));
+
+@layer base {
+  html.dark {
+    &,
+    * {
+      color-scheme: dark;
+    }
+  }
+}
+
 body {
   @apply m-0;
   font-family:
