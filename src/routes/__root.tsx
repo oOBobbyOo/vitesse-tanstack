@@ -1,5 +1,6 @@
 import {
   HeadContent,
+  Outlet,
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
@@ -56,22 +57,32 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   }),
   errorComponent: DefaultCatchBoundary,
   notFoundComponent: () => <NotFound />,
-  shellComponent: RootDocument,
+  component: () => {
+    return (
+      <DocumentWrapper>
+        <Outlet />
+      </DocumentWrapper>
+    )
+  },
 })
+
+function DocumentWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider>
+      <RootDocument>{children}</RootDocument>
+    </ThemeProvider>
+  )
+}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider>
-          <>
-            {children}
-            <Footer />
-          </>
-        </ThemeProvider>
+        {children}
+        <Footer />
 
         <TanStackDevtools
           config={{

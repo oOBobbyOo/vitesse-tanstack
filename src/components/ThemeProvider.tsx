@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { z } from 'zod'
 import { createClientOnlyFn, createIsomorphicFn } from '@tanstack/react-start'
+import { ScriptOnce } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { THEME_COLORS } from '@/constants'
 
@@ -56,6 +57,13 @@ const updateThemeClass = createClientOnlyFn((themeMode: ThemeMode) => {
   }
 })
 
+const setupPreferredListener = createClientOnlyFn(() => {
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  const handler = () => updateThemeClass('auto')
+  mediaQuery.addEventListener('change', handler)
+  return () => mediaQuery.removeEventListener('change', handler)
+})
+
 const getNextTheme = createClientOnlyFn((current: ThemeMode): ThemeMode => {
   const themes: Array<ThemeMode> =
     getSystemTheme() === 'dark'
@@ -63,6 +71,34 @@ const getNextTheme = createClientOnlyFn((current: ThemeMode): ThemeMode => {
       : ['auto', 'dark', 'light']
   return themes[(themes.indexOf(current) + 1) % themes.length]
 })
+
+const themeDetectorScript = (function () {
+  function themeFn() {
+    try {
+      const storedTheme = localStorage.getItem('theme') || 'auto'
+      const validTheme = ['light', 'dark', 'auto'].includes(storedTheme)
+        ? storedTheme
+        : 'auto'
+
+      if (validTheme === 'auto') {
+        const autoTheme = window.matchMedia('(prefers-color-scheme: dark)')
+          .matches
+          ? 'dark'
+          : 'light'
+        document.documentElement.classList.add(autoTheme, 'auto')
+      } else {
+        document.documentElement.classList.add(validTheme)
+      }
+    } catch (e) {
+      const autoTheme = window.matchMedia('(prefers-color-scheme: dark)')
+        .matches
+        ? 'dark'
+        : 'light'
+      document.documentElement.classList.add(autoTheme, 'auto')
+    }
+  }
+  return `(${themeFn.toString()})();`
+})()
 
 type ThemeContextProps = {
   themeMode: ThemeMode
@@ -80,6 +116,11 @@ type ThemeProviderProps = {
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [themeMode, setThemeMode] = useState<ThemeMode>(getStoredThemeMode)
 
+  useEffect(() => {
+    if (themeMode !== 'auto') return
+    return setupPreferredListener()
+  }, [themeMode])
+
   const resolvedTheme = themeMode === 'auto' ? getSystemTheme() : themeMode
 
   const setTheme = (newTheme: ThemeMode) => {
@@ -96,6 +137,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     <ThemeContext.Provider
       value={{ themeMode, resolvedTheme, setTheme, toggleMode }}
     >
+      <ScriptOnce children={themeDetectorScript} />
       {children}
     </ThemeContext.Provider>
   )
