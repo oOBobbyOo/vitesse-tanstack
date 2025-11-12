@@ -1,4 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { NavBar } from '@/components/NavBar'
 import { Footer } from '@/components/Footer'
 
 export const Route = createFileRoute('/_homeLayout')({
@@ -7,7 +8,8 @@ export const Route = createFileRoute('/_homeLayout')({
 
 function RouteComponent() {
   return (
-    <div className="px-10 py-20 text-center">
+    <div className="p-10 text-center">
+      <NavBar />
       <Outlet />
       <Footer />
       <div className="text-sm mx-auto mt-5 text-center opacity-25">
