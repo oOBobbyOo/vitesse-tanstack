@@ -13,7 +13,6 @@ import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
 import { NotFound } from '@/components/NotFound'
 import { ThemeProvider } from '@/components/ThemeProvider'
-import { Footer } from '@/components/Footer'
 
 import appCss from '@/styles/app.css?url'
 import { seo } from '@/utils/seo'
@@ -82,7 +81,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <Footer />
 
         <TanStackDevtools
           config={{
