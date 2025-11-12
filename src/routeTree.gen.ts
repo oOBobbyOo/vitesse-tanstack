@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as HomeLayoutRouteImport } from './routes/_homeLayout'
 import { Route as AboutLayoutRouteImport } from './routes/_aboutLayout'
+import { Route as UserRouteRouteImport } from './routes/user/route'
+import { Route as UserIndexRouteImport } from './routes/user/index'
 import { Route as HomeLayoutIndexRouteImport } from './routes/_homeLayout/index'
-import { Route as UserIdRouteImport } from './routes/user.$id'
+import { Route as UserNameRouteImport } from './routes/user/$name'
 import { Route as AboutLayoutAboutRouteImport } from './routes/_aboutLayout/about'
 
 const HomeLayoutRoute = HomeLayoutRouteImport.update({
@@ -23,15 +25,25 @@ const AboutLayoutRoute = AboutLayoutRouteImport.update({
   id: '/_aboutLayout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UserRouteRoute = UserRouteRouteImport.update({
+  id: '/user',
+  path: '/user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserIndexRoute = UserIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UserRouteRoute,
+} as any)
 const HomeLayoutIndexRoute = HomeLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => HomeLayoutRoute,
 } as any)
-const UserIdRoute = UserIdRouteImport.update({
-  id: '/user/$id',
-  path: '/user/$id',
-  getParentRoute: () => rootRouteImport,
+const UserNameRoute = UserNameRouteImport.update({
+  id: '/$name',
+  path: '/$name',
+  getParentRoute: () => UserRouteRoute,
 } as any)
 const AboutLayoutAboutRoute = AboutLayoutAboutRouteImport.update({
   id: '/about',
@@ -40,41 +52,48 @@ const AboutLayoutAboutRoute = AboutLayoutAboutRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/user': typeof UserRouteRouteWithChildren
   '/about': typeof AboutLayoutAboutRoute
-  '/user/$id': typeof UserIdRoute
+  '/user/$name': typeof UserNameRoute
   '/': typeof HomeLayoutIndexRoute
+  '/user/': typeof UserIndexRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof AboutLayoutAboutRoute
-  '/user/$id': typeof UserIdRoute
+  '/user/$name': typeof UserNameRoute
   '/': typeof HomeLayoutIndexRoute
+  '/user': typeof UserIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/user': typeof UserRouteRouteWithChildren
   '/_aboutLayout': typeof AboutLayoutRouteWithChildren
   '/_homeLayout': typeof HomeLayoutRouteWithChildren
   '/_aboutLayout/about': typeof AboutLayoutAboutRoute
-  '/user/$id': typeof UserIdRoute
+  '/user/$name': typeof UserNameRoute
   '/_homeLayout/': typeof HomeLayoutIndexRoute
+  '/user/': typeof UserIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/about' | '/user/$id' | '/'
+  fullPaths: '/user' | '/about' | '/user/$name' | '/' | '/user/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/user/$id' | '/'
+  to: '/about' | '/user/$name' | '/' | '/user'
   id:
     | '__root__'
+    | '/user'
     | '/_aboutLayout'
     | '/_homeLayout'
     | '/_aboutLayout/about'
-    | '/user/$id'
+    | '/user/$name'
     | '/_homeLayout/'
+    | '/user/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  UserRouteRoute: typeof UserRouteRouteWithChildren
   AboutLayoutRoute: typeof AboutLayoutRouteWithChildren
   HomeLayoutRoute: typeof HomeLayoutRouteWithChildren
-  UserIdRoute: typeof UserIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -93,6 +112,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/user': {
+      id: '/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof UserRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user/': {
+      id: '/user/'
+      path: '/'
+      fullPath: '/user/'
+      preLoaderRoute: typeof UserIndexRouteImport
+      parentRoute: typeof UserRouteRoute
+    }
     '/_homeLayout/': {
       id: '/_homeLayout/'
       path: '/'
@@ -100,12 +133,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeLayoutIndexRouteImport
       parentRoute: typeof HomeLayoutRoute
     }
-    '/user/$id': {
-      id: '/user/$id'
-      path: '/user/$id'
-      fullPath: '/user/$id'
-      preLoaderRoute: typeof UserIdRouteImport
-      parentRoute: typeof rootRouteImport
+    '/user/$name': {
+      id: '/user/$name'
+      path: '/$name'
+      fullPath: '/user/$name'
+      preLoaderRoute: typeof UserNameRouteImport
+      parentRoute: typeof UserRouteRoute
     }
     '/_aboutLayout/about': {
       id: '/_aboutLayout/about'
@@ -116,6 +149,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface UserRouteRouteChildren {
+  UserNameRoute: typeof UserNameRoute
+  UserIndexRoute: typeof UserIndexRoute
+}
+
+const UserRouteRouteChildren: UserRouteRouteChildren = {
+  UserNameRoute: UserNameRoute,
+  UserIndexRoute: UserIndexRoute,
+}
+
+const UserRouteRouteWithChildren = UserRouteRoute._addFileChildren(
+  UserRouteRouteChildren,
+)
 
 interface AboutLayoutRouteChildren {
   AboutLayoutAboutRoute: typeof AboutLayoutAboutRoute
@@ -142,9 +189,9 @@ const HomeLayoutRouteWithChildren = HomeLayoutRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  UserRouteRoute: UserRouteRouteWithChildren,
   AboutLayoutRoute: AboutLayoutRouteWithChildren,
   HomeLayoutRoute: HomeLayoutRouteWithChildren,
-  UserIdRoute: UserIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
