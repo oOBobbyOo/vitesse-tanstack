@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as HomeLayoutRouteImport } from './routes/_homeLayout'
 import { Route as AboutLayoutRouteImport } from './routes/_aboutLayout'
 import { Route as UserRouteRouteImport } from './routes/user/route'
+import { Route as CountRouteRouteImport } from './routes/count/route'
 import { Route as UserIndexRouteImport } from './routes/user/index'
 import { Route as HomeLayoutIndexRouteImport } from './routes/_homeLayout/index'
 import { Route as UserNameRouteImport } from './routes/user/$name'
@@ -28,6 +29,11 @@ const AboutLayoutRoute = AboutLayoutRouteImport.update({
 const UserRouteRoute = UserRouteRouteImport.update({
   id: '/user',
   path: '/user',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CountRouteRoute = CountRouteRouteImport.update({
+  id: '/count',
+  path: '/count',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UserIndexRoute = UserIndexRouteImport.update({
@@ -52,6 +58,7 @@ const AboutLayoutAboutRoute = AboutLayoutAboutRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/count': typeof CountRouteRoute
   '/user': typeof UserRouteRouteWithChildren
   '/about': typeof AboutLayoutAboutRoute
   '/user/$name': typeof UserNameRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/user/': typeof UserIndexRoute
 }
 export interface FileRoutesByTo {
+  '/count': typeof CountRouteRoute
   '/about': typeof AboutLayoutAboutRoute
   '/user/$name': typeof UserNameRoute
   '/': typeof HomeLayoutIndexRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/count': typeof CountRouteRoute
   '/user': typeof UserRouteRouteWithChildren
   '/_aboutLayout': typeof AboutLayoutRouteWithChildren
   '/_homeLayout': typeof HomeLayoutRouteWithChildren
@@ -76,11 +85,12 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/user' | '/about' | '/user/$name' | '/' | '/user/'
+  fullPaths: '/count' | '/user' | '/about' | '/user/$name' | '/' | '/user/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/about' | '/user/$name' | '/' | '/user'
+  to: '/count' | '/about' | '/user/$name' | '/' | '/user'
   id:
     | '__root__'
+    | '/count'
     | '/user'
     | '/_aboutLayout'
     | '/_homeLayout'
@@ -91,6 +101,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  CountRouteRoute: typeof CountRouteRoute
   UserRouteRoute: typeof UserRouteRouteWithChildren
   AboutLayoutRoute: typeof AboutLayoutRouteWithChildren
   HomeLayoutRoute: typeof HomeLayoutRouteWithChildren
@@ -117,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/user'
       fullPath: '/user'
       preLoaderRoute: typeof UserRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/count': {
+      id: '/count'
+      path: '/count'
+      fullPath: '/count'
+      preLoaderRoute: typeof CountRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/user/': {
@@ -189,6 +207,7 @@ const HomeLayoutRouteWithChildren = HomeLayoutRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  CountRouteRoute: CountRouteRoute,
   UserRouteRoute: UserRouteRouteWithChildren,
   AboutLayoutRoute: AboutLayoutRouteWithChildren,
   HomeLayoutRoute: HomeLayoutRouteWithChildren,
