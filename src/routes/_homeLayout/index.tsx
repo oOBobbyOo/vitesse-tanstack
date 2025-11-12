@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_homeLayout/')({
 
 function App() {
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <Logos />
       <InputEntry />
     </div>
