@@ -22,7 +22,7 @@ export function InputEntry() {
         placeholder="What's your name?"
       />
       <div>
-        <button className="btn text-sm m-3" onClick={go}>
+        <button className="btn text-sm m-3" disabled={!name} onClick={go}>
           GO
         </button>
       </div>
