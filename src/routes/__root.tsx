@@ -54,7 +54,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
-  errorComponent: DefaultCatchBoundary,
+  errorComponent: (props) => {
+    return (
+      <RootDocument>
+        <DefaultCatchBoundary {...props} />
+      </RootDocument>
+    )
+  },
   notFoundComponent: () => <NotFound />,
   component: () => {
     return (
