@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from 'react'
-import type { RefObject} from 'react';
+import type { RefObject } from 'react'
 
 export interface UseResizeObserverOptions {
   ref: RefObject<HTMLElement>
