@@ -14,7 +14,7 @@ export function Footer() {
     {
       label: 'Tanstack',
       icon: <MdLibraryBooks />,
-      to: 'https://github.com/tanstack',
+      to: 'https://tanstack.com',
     },
     {
       label: 'GitHub',

@@ -12,10 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as HomeLayoutRouteImport } from './routes/_homeLayout'
 import { Route as AboutLayoutRouteImport } from './routes/_aboutLayout'
 import { Route as UserRouteRouteImport } from './routes/user/route'
+import { Route as PostsRouteRouteImport } from './routes/posts/route'
 import { Route as CountRouteRouteImport } from './routes/count/route'
 import { Route as UserIndexRouteImport } from './routes/user/index'
+import { Route as PostsIndexRouteImport } from './routes/posts/index'
 import { Route as HomeLayoutIndexRouteImport } from './routes/_homeLayout/index'
 import { Route as UserNameRouteImport } from './routes/user/$name'
+import { Route as PostsPostIdRouteImport } from './routes/posts/$postId'
 import { Route as AboutLayoutAboutRouteImport } from './routes/_aboutLayout/about'
 
 const HomeLayoutRoute = HomeLayoutRouteImport.update({
@@ -31,6 +34,11 @@ const UserRouteRoute = UserRouteRouteImport.update({
   path: '/user',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PostsRouteRoute = PostsRouteRouteImport.update({
+  id: '/posts',
+  path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CountRouteRoute = CountRouteRouteImport.update({
   id: '/count',
   path: '/count',
@@ -40,6 +48,11 @@ const UserIndexRoute = UserIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => UserRouteRoute,
+} as any)
+const PostsIndexRoute = PostsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PostsRouteRoute,
 } as any)
 const HomeLayoutIndexRoute = HomeLayoutIndexRouteImport.update({
   id: '/',
@@ -51,6 +64,11 @@ const UserNameRoute = UserNameRouteImport.update({
   path: '/$name',
   getParentRoute: () => UserRouteRoute,
 } as any)
+const PostsPostIdRoute = PostsPostIdRouteImport.update({
+  id: '/$postId',
+  path: '/$postId',
+  getParentRoute: () => PostsRouteRoute,
+} as any)
 const AboutLayoutAboutRoute = AboutLayoutAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -59,49 +77,77 @@ const AboutLayoutAboutRoute = AboutLayoutAboutRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/count': typeof CountRouteRoute
+  '/posts': typeof PostsRouteRouteWithChildren
   '/user': typeof UserRouteRouteWithChildren
   '/about': typeof AboutLayoutAboutRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/user/$name': typeof UserNameRoute
   '/': typeof HomeLayoutIndexRoute
+  '/posts/': typeof PostsIndexRoute
   '/user/': typeof UserIndexRoute
 }
 export interface FileRoutesByTo {
   '/count': typeof CountRouteRoute
   '/about': typeof AboutLayoutAboutRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/user/$name': typeof UserNameRoute
   '/': typeof HomeLayoutIndexRoute
+  '/posts': typeof PostsIndexRoute
   '/user': typeof UserIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/count': typeof CountRouteRoute
+  '/posts': typeof PostsRouteRouteWithChildren
   '/user': typeof UserRouteRouteWithChildren
   '/_aboutLayout': typeof AboutLayoutRouteWithChildren
   '/_homeLayout': typeof HomeLayoutRouteWithChildren
   '/_aboutLayout/about': typeof AboutLayoutAboutRoute
+  '/posts/$postId': typeof PostsPostIdRoute
   '/user/$name': typeof UserNameRoute
   '/_homeLayout/': typeof HomeLayoutIndexRoute
+  '/posts/': typeof PostsIndexRoute
   '/user/': typeof UserIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/count' | '/user' | '/about' | '/user/$name' | '/' | '/user/'
+  fullPaths:
+    | '/count'
+    | '/posts'
+    | '/user'
+    | '/about'
+    | '/posts/$postId'
+    | '/user/$name'
+    | '/'
+    | '/posts/'
+    | '/user/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/count' | '/about' | '/user/$name' | '/' | '/user'
+  to:
+    | '/count'
+    | '/about'
+    | '/posts/$postId'
+    | '/user/$name'
+    | '/'
+    | '/posts'
+    | '/user'
   id:
     | '__root__'
     | '/count'
+    | '/posts'
     | '/user'
     | '/_aboutLayout'
     | '/_homeLayout'
     | '/_aboutLayout/about'
+    | '/posts/$postId'
     | '/user/$name'
     | '/_homeLayout/'
+    | '/posts/'
     | '/user/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   CountRouteRoute: typeof CountRouteRoute
+  PostsRouteRoute: typeof PostsRouteRouteWithChildren
   UserRouteRoute: typeof UserRouteRouteWithChildren
   AboutLayoutRoute: typeof AboutLayoutRouteWithChildren
   HomeLayoutRoute: typeof HomeLayoutRouteWithChildren
@@ -130,6 +176,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/posts': {
+      id: '/posts'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof PostsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/count': {
       id: '/count'
       path: '/count'
@@ -143,6 +196,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/user/'
       preLoaderRoute: typeof UserIndexRouteImport
       parentRoute: typeof UserRouteRoute
+    }
+    '/posts/': {
+      id: '/posts/'
+      path: '/'
+      fullPath: '/posts/'
+      preLoaderRoute: typeof PostsIndexRouteImport
+      parentRoute: typeof PostsRouteRoute
     }
     '/_homeLayout/': {
       id: '/_homeLayout/'
@@ -158,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserNameRouteImport
       parentRoute: typeof UserRouteRoute
     }
+    '/posts/$postId': {
+      id: '/posts/$postId'
+      path: '/$postId'
+      fullPath: '/posts/$postId'
+      preLoaderRoute: typeof PostsPostIdRouteImport
+      parentRoute: typeof PostsRouteRoute
+    }
     '/_aboutLayout/about': {
       id: '/_aboutLayout/about'
       path: '/about'
@@ -167,6 +234,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface PostsRouteRouteChildren {
+  PostsPostIdRoute: typeof PostsPostIdRoute
+  PostsIndexRoute: typeof PostsIndexRoute
+}
+
+const PostsRouteRouteChildren: PostsRouteRouteChildren = {
+  PostsPostIdRoute: PostsPostIdRoute,
+  PostsIndexRoute: PostsIndexRoute,
+}
+
+const PostsRouteRouteWithChildren = PostsRouteRoute._addFileChildren(
+  PostsRouteRouteChildren,
+)
 
 interface UserRouteRouteChildren {
   UserNameRoute: typeof UserNameRoute
@@ -208,6 +289,7 @@ const HomeLayoutRouteWithChildren = HomeLayoutRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   CountRouteRoute: CountRouteRoute,
+  PostsRouteRoute: PostsRouteRouteWithChildren,
   UserRouteRoute: UserRouteRouteWithChildren,
   AboutLayoutRoute: AboutLayoutRouteWithChildren,
   HomeLayoutRoute: HomeLayoutRouteWithChildren,

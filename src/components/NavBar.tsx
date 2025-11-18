@@ -1,5 +1,10 @@
 import { Link } from '@tanstack/react-router'
-import { FaBookReader, FaHome, FaSortNumericDown } from 'react-icons/fa'
+import {
+  FaBookReader,
+  FaHome,
+  FaRegListAlt,
+  FaSortNumericDown,
+} from 'react-icons/fa'
 import { cn } from '@/utils/cn'
 
 export function NavBar() {
@@ -8,6 +13,11 @@ export function NavBar() {
       label: 'Home',
       icon: <FaHome />,
       to: '/',
+    },
+    {
+      label: 'Posts',
+      icon: <FaRegListAlt />,
+      to: '/posts',
     },
     {
       label: 'Count',
